@@ -1,0 +1,72 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Numbers API",
+    "description": "API for fetching and calculating averages of different number sequences",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/numbers/{numberid}": {
+      "get": {
+        "summary": "Get numbers and calculate average",
+        "description": "Fetches numbers from an external API and calculates a running average using a sliding window",
+        "parameters": [
+          {
+            "name": "numberid",
+            "in": "path",
+            "description": "Type of numbers to fetch (p=Prime, f=Fibonacci, e=Even, r=Random)",
+            "required": true,
+            "type": "string",
+            "enum": ["p", "f", "e", "r"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "windowPrevstate": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "Previous state of the sliding window"
+                },
+                "windowCurrstate": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "Current state of the sliding window"
+                },
+                "numbers": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "Numbers fetched from the external API"
+                },
+                "avg": {
+                  "type": "number",
+                  "description": "Average of numbers in the current window"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid numberid"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "504": {
+            "description": "Gateway timeout"
+          }
+        }
+      }
+    }
+  }
+}
